@@ -31,7 +31,7 @@ class RegistroHoras(base):
     maquinaria_id = Column(UUID(as_uuid=True),ForeignKey("maquinaria.id"), nullable=False)
     fecha = Column(Date, nullable=False)
     horas_maquina = Column(Numeric, nullable=False)
-    horas_hombre = Column(Numeric, nullable=False)
+    actividad = Column(String(50), nullable=False)
     operador = Column(String(50), nullable=False)
     
     maquinaria = relationship("Maquinaria", back_populates="registro_horas")

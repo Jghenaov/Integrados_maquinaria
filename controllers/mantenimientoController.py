@@ -3,40 +3,67 @@ from config.db import session
 
 
 def registrar_mantenimiento(maquinaria_id, tipo_mantenimiento, fecha_inicio, fecha_fin, descripcion, responsable):
-    mantenimiento = Mantenimiento(
-        maquinaria_id=maquinaria_id,
-        tipo_mantenimiento=tipo_mantenimiento,
-        fecha_inicio=fecha_inicio,
-        fecha_fin=fecha_fin,
-        descripcion=descripcion,
-        responsable=responsable,
-        estado="En Proceso"  
-    )
-    session.add(mantenimiento)
-    session.commit()
+    try:
+        mantenimiento = Mantenimiento(
+            maquinaria_id=maquinaria_id,
+            tipo_mantenimiento=tipo_mantenimiento,
+            fecha_inicio=fecha_inicio,
+            fecha_fin=fecha_fin,
+            descripcion=descripcion,
+            responsable=responsable,
+            estado="En Proceso"  
+        )
+        session.add(mantenimiento)
+        session.commit()
+        
+    except Exception as e:
+        session.rollback()
+        print(f"ERROR: {e}")
+
 
 def get_mantenimiento(maquinaria_id):
-    return session.query(Mantenimiento).filter(Mantenimiento.maquinaria_id == maquinaria_id).all()
-
+    print(maquinaria_id)
+    try:
+        return session.query(Mantenimiento).filter(Mantenimiento.maquinaria_id == maquinaria_id).all()
+    
+    except Exception as e:
+        print(f"ERROR: {e}")
+   
+        
 def update_mantenimiento(id, maquinaria_id, tipo_mantenimiento, fecha_inicio, fecha_fin, descripcion, responsable):
-    mantenimiento = session.query(Mantenimiento).get(id)
-    if mantenimiento:
-        mantenimiento.maquinaria_id = maquinaria_id
-        mantenimiento.tipo_mantenimiento = tipo_mantenimiento
-        mantenimiento.fecha_inicio = fecha_inicio
-        mantenimiento.fecha_fin = fecha_fin
-        mantenimiento.descripcion = descripcion
-        mantenimiento.responsable = responsable
-        session.commit()
+    try:
+        mantenimiento = session.query(Mantenimiento).get(id)
+        if mantenimiento:
+            mantenimiento.maquinaria_id = maquinaria_id
+            mantenimiento.tipo_mantenimiento = tipo_mantenimiento
+            mantenimiento.fecha_inicio = fecha_inicio
+            mantenimiento.fecha_fin = fecha_fin
+            mantenimiento.descripcion = descripcion
+            mantenimiento.responsable = responsable
+            session.commit()
+            
+    except Exception as e:
+        session.rollback()
+        print(f"ERROR: {e}")
+
+
 
 def mantenimiento_completado(id):
-    mantenimiento = session.query(Mantenimiento).get(id)
-    if mantenimiento:
-        mantenimiento.estado = "Completado"
-        session.commit()
+    try:
+        mantenimiento = session.query(Mantenimiento).get(id)
+        if mantenimiento:
+            mantenimiento.estado = "Completado"
+            session.commit()
+            
+    except Exception as e:
+        print(f"ERROR: {e}")
 
 def mantenimiento_en_proceso(id):
-    mantenimiento = session.query(Mantenimiento).get(id)
-    if mantenimiento:
-        mantenimiento.estado = "En Proceso"
-        session.commit()
+    try:
+        mantenimiento = session.query(Mantenimiento).get(id)
+        if mantenimiento:
+            mantenimiento.estado = "En Proceso"
+            session.commit()
+
+    except Exception as e:
+        print(f"ERROR: {e}")
