@@ -22,7 +22,6 @@ def registrar_mantenimiento(maquinaria_id, tipo_mantenimiento, fecha_inicio, fec
 
 
 def get_mantenimiento(maquinaria_id):
-    print(maquinaria_id)
     try:
         return session.query(Mantenimiento).filter(Mantenimiento.maquinaria_id == maquinaria_id).all()
     
@@ -64,6 +63,15 @@ def mantenimiento_en_proceso(id):
         if mantenimiento:
             mantenimiento.estado = "En Proceso"
             session.commit()
+
+    except Exception as e:
+        print(f"ERROR: {e}")
+        
+# mostrar todos los mantenimientos realizados
+def mostrar_mantenimientos():
+    try:
+        mantenimientos = session.query(Mantenimiento).all()
+        return mantenimientos
 
     except Exception as e:
         print(f"ERROR: {e}")

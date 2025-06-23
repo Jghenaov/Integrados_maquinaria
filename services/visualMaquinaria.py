@@ -19,7 +19,8 @@ class VisualMaquinaria:
                 table.field_names = ["ID", "Nombre", "Tipo", "Modelo", "Serie", "Ubicación", "Fecha Adquisición", "Estado"]
                 for m in maquinarias:
                     table.add_row([m.id, m.nombre, m.tipo, m.modelo, m.serie, m.ubicacion, m.fecha_adquisicion, m.estado])
-                    print(table)
+                print("\n=================== MAQUINARIA ===================")    
+                print(table)
             else:
                 print("No hay maquinaria registrada.")
 
@@ -64,13 +65,15 @@ class VisualMaquinaria:
             
             if opcion_horas == '1':
                 try:
+                    visual.mostrar()
                     maquinaria_id = input("ID de la maquinaria: ")
                     horas = horasControllers.get_horas(maquinaria_id)
                     if horas:
                         table = PrettyTable()
-                        table.field_names = ["ID", "Fecha", "Horas Máquina", "Operador"]
+                        table.field_names = ["ID", "Fecha", "Horas Máquina", "Actividad", "Operador"]
                         for h in horas:
-                            table.add_row([h.id, h.fecha, h.horas_maquina, h.operador])
+                            table.add_row([h.id, h.fecha, h.horas_maquina, h.actividad, h.operador])
+                        print('\nHoras de la maquinaria')    
                         print(table)
                     else:
                         print("No hay horas registradas para esta maquinaria.")
@@ -80,8 +83,9 @@ class VisualMaquinaria:
                     
             elif opcion_horas == '2':
                 try:
+                    visual.mostrar()
                     maquinaria_id = input("ID maquinaria: ")
-                    fecha = datetime.strptime(input("Fecha (YYYY-MM-DD): "), "%Y-%m-%d")
+                    fecha = datetime.strptime(input("Fecha YYYY-MM-DD: "), '%Y-%m-%d')
                     horas_maquina = input("Horas Máquina: ")
                     actividad = input("Actividad realizada: ")
                     operador = input("Operador: ")
@@ -252,7 +256,13 @@ class VisualMaquinaria:
                     
             elif opcion == '5':
                 try:
+                    # Mostrar todos los mantenimientos realizados
+                    print(mantenimientoController.mostrar_mantenimientos())
                     id_mantenimiento = input("ID del mantenimiento: ")
+                    # Valadacion de que el mantenimiento exista
+                    if mantenimientoController.get_mantenimiento(id_mantenimiento) is None:
+                        print("Mantenimiento no encontrado.")
+                        return
                     mantenimientoController.mantenimiento_completado(id_mantenimiento)
                     input("Estado actualizado a Completado. Presione Enter para continuar...")
                     

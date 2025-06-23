@@ -1,18 +1,19 @@
 from config.models import RegistroHoras
 from config.db import session
 
-def get_horas(id_maquinaria):
+def get_horas(maquinaria_id):
     try:        
-        horas = session.query(RegistroHoras).filter(RegistroHoras.maquinaria_id == id_maquinaria).all()
+        horas = session.query(RegistroHoras).filter(RegistroHoras.maquinaria_id == maquinaria_id).all()
         return horas
     
     except Exception as e:
         print(f"ERROR: {e}")
 
-def registrar_horas(id_maquinaria, fecha, horas_maquina, actividad, operador):
-    print(id_maquinaria)
+def registrar_horas(maquinaria_id, fecha, horas_maquina, actividad, operador):
     try:
-        horas = RegistroHoras(id_maquinaria=id_maquinaria, fecha=fecha, horas_maquina=horas_maquina, actividad=actividad, operador=operador)
+        horas = RegistroHoras(maquinaria_id=maquinaria_id, fecha=fecha, horas_maquina=horas_maquina, actividad=actividad, operador=operador)
+        if not horas:
+            raise Exception("Horas no registradas, algunos de los parametros no son correctos.")
         session.add(horas)
         session.commit()
     
