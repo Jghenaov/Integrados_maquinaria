@@ -1,5 +1,5 @@
 from config.models import Maquinaria
-from config.db import session  # Asegúrate de tener esto en tu db.py
+from config.db import session  
 
 class MaquinariaController:
     

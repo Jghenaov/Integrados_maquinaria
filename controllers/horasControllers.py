@@ -11,7 +11,7 @@ def get_horas(maquinaria_id):
 
 def registrar_horas(maquinaria_id, fecha, horas_maquina, actividad, operador):
     try:
-        horas = RegistroHoras(maquinaria_id=maquinaria_id, fecha=fecha, horas_maquina=horas_maquina, actividad=actividad, operador=operador)
+        horas = RegistroHoras(maquinaria_id=maquinaria_id , fecha=fecha, horas_maquina=horas_maquina, actividad=actividad, operador=operador)
         if not horas:
             raise Exception("Horas no registradas, algunos de los parametros no son correctos.")
         session.add(horas)
