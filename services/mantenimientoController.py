@@ -75,3 +75,16 @@ def mostrar_mantenimientos():
 
     except Exception as e:
         print(f"ERROR: {e}")
+def eliminar_mantenimiento(id):
+    try:
+        mantenimiento = session.query(Mantenimiento).get(id)
+        if mantenimiento:
+            session.delete(mantenimiento)
+            session.commit()
+        else:
+            raise Exception("Mantenimiento no encontrado")
+
+    except Exception as e:
+        session.rollback()
+        print(f"ERROR: {e}")
+                
