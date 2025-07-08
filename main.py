@@ -1,5 +1,9 @@
-from services.visualMaquinaria import VisualMaquinaria
+#from services.visualMaquinaria import VisualMaquinaria
+from config.database import crear_tablas
+from model import *
+
+
 
 if __name__ == "__main__":
-    interfaz = VisualMaquinaria()
-    interfaz.mostrar_menu()
+    interfaz = crear_tablas()
+    

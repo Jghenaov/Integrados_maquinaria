@@ -33,3 +33,5 @@ class OperacionNoPermitidaError(ProyectoError):
     def __init__(self, detalle="Operacion no permitida en el sistema."):
         self.message = detalle
         super().__init__(self.message)
+        
+

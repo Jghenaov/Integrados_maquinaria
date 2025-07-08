@@ -1,61 +1,63 @@
-from config.models import Maquinaria
-from config.db import session  
+from model.Maquinaria import Maquinaria
+from sqlalchemy.orm import Session
+from config.Crud import create, get_all, get_by_id, update, delete
+from Utils.logs import loggings
+from Utils.exceptions import *
+from datetime import datetime
 
 class MaquinariaController:
+    def __init__(self):
+        self.log = loggings()
     
-    def listar_maquinarias(self):
+    def obtener_maquinaria(self, db:Session):
         try:
-            return session.query(Maquinaria).all()
-        
+            return get_all(db, Maquinaria)
         except Exception as e:
-            print(f"ERROR: {e}")
-    
-    def agregar_maquinaria(self, maquinaria):
-        try:
-            session.add(maquinaria)
-            session.commit()
-        
-        except Exception as e:
-            session.rollback()
-            print(f"ERROR: {e}")
-    
-    def eliminar_maquinaria(self, id):
-        maquinaria = None
-        try:
-            maquinaria = session.query(Maquinaria).get(id)
-            if maquinaria:
-                session.delete(maquinaria)
-                session.commit()
-            else:
-                raise Exception("Maquinaria no encontrada")
+            self.log.error(f"Error: {e}")
             
-        except Exception as e:
-            session.rollback()  
-            print(f"ERROR: {e}")
-    
-    def actualizar_maquinaria(self, maquinaria_actualizada):
-        print(maquinaria_actualizada)
-        try:
-            maquinaria = session.query(Maquinaria).get(maquinaria_actualizada.id)
-            if maquinaria:
-                maquinaria.nombre = maquinaria_actualizada.nombre
-                maquinaria.tipo = maquinaria_actualizada.tipo
-                maquinaria.modelo = maquinaria_actualizada.modelo
-                maquinaria.serie = maquinaria_actualizada.serie
-                maquinaria.ubicacion = maquinaria_actualizada.ubicacion
-                maquinaria.fecha_adquisicion = maquinaria_actualizada.fecha_adquisicion
-                maquinaria.estado = maquinaria_actualizada.estado
-                session.commit()
             
-        except Exception as e:
-            session.rollback()
-            print(f"ERROR: {e}")
     
-    def obtener_maquinaria(self, id):
-        print(id)
+    def crear_maquinaria(self, db:Session, nombre: str, tipo: str, modelo: str, serie: str, ubicacion: str, fecha_adquisicion: datetime, estado: str):
         try:
-            return session.query(Maquinaria).get(id)
-        
+                        
+            equipo_data = {
+                "nombre": nombre,
+                "tipo": tipo,
+                "modelo": modelo,
+                "serie": serie,
+                "ubicacion": ubicacion,
+                "fecha_adquisicion": fecha_adquisicion.date(),
+                "estado": estado
+            }
+            self.log.info(f'Equipo creado: {equipo_data["nombre"]}')
+            return create(db, Maquinaria, equipo_data)
         except Exception as e:
-            print(f"ERROR: {e}")
+            self.log.error(f"Error: {e}")
+            
+    # Obtener maquinaria por ID      
+    def get_maquinaria_by_id(self, db:Session, maquinaria_id: int):
+        try:
+            return get_by_id(db, Maquinaria, maquinaria_id)
+        except Exception as e:
+            self.log.error(f"Error: {e}")
     
+    # Actualizar maquinaria por id        
+    def actualizar_maquinaria(self, db:Session, maquinaria_id: int, nuevo_dato: dict):
+        controlmaquinaria = MaquinariaController()
+        try:
+            maquinaria = controlmaquinaria.get_maquinaria_by_id(db, maquinaria_id)
+            return update(db, maquinaria, nuevo_dato)
+        except Exception as e:
+            self.log.error(f"Error: {e}")
+            
+    # Eliminar maquinaria por id
+    def eliminar_maquinaria(self, db:Session, maquinaria_id: int):
+        controlmaquinaria = MaquinariaController()
+        try:
+            maquinaria = controlmaquinaria.get_maquinaria_by_id(db, maquinaria_id)
+            if maquinaria is None:
+                raise MaterialNoEncontradoError(maquinaria_id)
+            
+            return delete(db, maquinaria)
+        except Exception as e:
+            self.log.error(f"Error: {e}")
