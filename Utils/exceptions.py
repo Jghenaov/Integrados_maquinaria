@@ -34,4 +34,20 @@ class OperacionNoPermitidaError(ProyectoError):
         self.message = detalle
         super().__init__(self.message)
         
+        
+class ErrorDeRegitro(ProyectoError):
+    def __init__(self, detalle="Error en el registro."):
+        self.message = detalle
+        super().__init__(self.message)
+        
+class RegistroVacioError(ProyectoError):
+    def __init__(self, detalle="El registro esta vacio."):
+        self.message = detalle
+        super().__init__(self.message)
+        
+class RegistroNoEncontradoError(ProyectoError):
+    def __init__(self, detalle="El registro no fue encontrado."):
+        self.message = detalle
+        super().__init__(self.message)
+        
 

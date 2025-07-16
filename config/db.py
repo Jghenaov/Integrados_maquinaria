@@ -24,6 +24,7 @@ base = declarative_base()
 Session = sessionmaker(bind=engenie)
 session = Session()
 
+import model
 
 try:
     engenie.connect()

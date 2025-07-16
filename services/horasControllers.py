@@ -1,4 +1,4 @@
-from config.models import RegistroHoras
+from model import RegistroHoras
 from config.db import session
 
 def get_horas(maquinaria_id):
